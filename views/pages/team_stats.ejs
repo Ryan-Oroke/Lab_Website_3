@@ -1,0 +1,134 @@
+<% include ../partials/header %>
+<% include ../partials/menu %>
+<div class="container">
+	<br>
+	<div class="jumbotron">
+		<h1 class="display-4">Fall 2018 Stats</h1>
+		<p class="lead">Detailed information on how the Buffs are doing in the 2018 Football Season!</p>
+	</div>
+
+	<table class="table table-bordered" id="stats_table">
+		<tr>
+			<th class="align-bottom" rowspan="2">Game Date</th>
+			<th class="align-bottom" rowspan="2">Opposing Team Name</th>
+			<th class="text-center" colspan="2">Score</th>
+			<th class="align-bottom" rowspan="2">Winner</th>
+		</tr>
+		<tr>
+			<th>Home Score</th>
+			<th>Opp. Score</th>
+		</tr>
+		<!-- TODO: Iterate over the Football_table data here 
+						1. Display the information for each row (date, name, home score, visitor score)
+						2. Determine who the winner is and display it in the final column
+
+						If you're not sure how the logic should work here, review the code you add to the client-side javascript
+						that ran onload for Lab 5.  We are doing the same kind of operations we had in Lab 5, but we are instead having
+						everything handled via server-side scripts
+			-->
+		<form action="/team_stats/pop" method="get">
+			<% 
+					var sep = "</td><td>"
+					if(data[0]){
+						var row = '';
+						data[0].forEach(function(item){
+							row += '<tr><td>';
+	
+								<!-- Game Date -->
+								if(item.game_date){
+									row += item.game_date + sep;
+								} else {
+									row += "No Game Date" + sep;
+								}
+	
+								<!-- Visitor Name -->
+								if(item.visitor_name){
+									row += item.visitor_name + sep;
+								} else {
+									row += "No Visitor Name" + sep;
+								}
+	
+								<!-- Home Score -->
+								if(item.home_score){
+									row += item.home_score + sep;
+								} else {
+									row += "No Home Score" + sep;
+								}
+	
+								<!-- Visitor Score -->
+								if(item.visitor_score){
+									row += item.visitor_score + sep;
+								} else {
+									row += 'No Visitor Score' + sep;
+								}
+	
+								<!-- Winner -->
+								if(item.visitor_score > item.home_score){
+									row += item.visitor_name + '</td>';
+								} else {
+									row += "Colorado" + "</td>";
+								}
+	
+								row += "</tr>";
+						}); %>
+			<%- row %>
+			<% } %>
+		</form>
+	</table>
+	<br>
+
+	<table class="table text-center">
+		<tr>
+			<th>Wins</th>
+			<th>Losses</th>
+		</tr>
+		<tr>
+			<td>
+				<!-- TODO: Display the total number of wins here.  
+								This value should come from your server.js files query, don't calculate it in this file! -->
+				<form action="/team_stats" method="get">
+					<%
+					//console.log(data[1]);
+					if(data[1]){
+						//console.log(data[1]);
+						var w = '';
+						data[1].forEach(function(item){
+							if(item.count){
+								w = item.count;
+							} else {
+								w = "No Wins Available";
+							}
+						})
+					}
+					%>
+					<%- w %>
+				</form>
+			</td>
+			<td>
+				<!-- TODO: Display the total number of losses here.  
+							    This value should come from your server.js files query, don't calculate it in this file! -->
+				<form action="/team_stats" method="get">
+					<%
+						//console.log(data[2]);
+						if(data[2]){
+							//console.log(data[2]);
+							var l = '';
+							data[2].forEach(function(item){
+								if(item.count){
+									l = item.count;
+								} else {
+									l = "No Losses Available";
+								}
+							})
+						}
+						%>
+					<%- l %>
+				</form>
+			</td>
+		</tr>
+		<!-- visitor_name, home_score, visitor_score, game_date, players-->
+
+	</table>
+
+</div>
+<% include ../partials/footer %>
